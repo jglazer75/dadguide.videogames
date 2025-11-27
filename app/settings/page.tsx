@@ -9,7 +9,7 @@ async function getSettings() {
     const settings = await prisma.appSettings.findUnique({
         where: { id: 'settings' }
     });
-    return settings || { dataSource: 'WIKIPEDIA', igdbClientId: '', igdbClientSecret: '' };
+    return settings || { dataSource: 'WIKIPEDIA', igdbClientId: '', igdbClientSecret: '', geminiApiKey: '' };
 }
 
 export default async function SettingsPage() {
@@ -25,7 +25,8 @@ export default async function SettingsPage() {
                 initialSettings={{
                     dataSource: settings.dataSource,
                     igdbClientId: settings.igdbClientId || '',
-                    igdbClientSecret: settings.igdbClientSecret || ''
+                    igdbClientSecret: settings.igdbClientSecret || '',
+                    geminiApiKey: settings.geminiApiKey || ''
                 }}
             />
         </Box>

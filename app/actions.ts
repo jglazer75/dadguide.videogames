@@ -16,19 +16,21 @@ export async function updateWeekProgress(weekId: string, isCompleted: boolean, h
     revalidatePath('/'); // Update dashboard too
 }
 
-export async function saveSettings(settings: { dataSource: string, igdbClientId: string, igdbClientSecret: string }) {
+export async function saveSettings(settings: { dataSource: string, igdbClientId: string, igdbClientSecret: string, geminiApiKey: string }) {
     await prisma.appSettings.upsert({
         where: { id: 'settings' },
         update: {
             dataSource: settings.dataSource,
             igdbClientId: settings.igdbClientId,
-            igdbClientSecret: settings.igdbClientSecret
+            igdbClientSecret: settings.igdbClientSecret,
+            geminiApiKey: settings.geminiApiKey
         },
         create: {
             id: 'settings',
             dataSource: settings.dataSource,
             igdbClientId: settings.igdbClientId,
-            igdbClientSecret: settings.igdbClientSecret
+            igdbClientSecret: settings.igdbClientSecret,
+            geminiApiKey: settings.geminiApiKey
         }
     });
     revalidatePath('/settings');

@@ -16,6 +16,7 @@ interface SettingsFormProps {
         dataSource: string;
         igdbClientId: string;
         igdbClientSecret: string;
+        geminiApiKey: string;
     }
 }
 
@@ -23,6 +24,7 @@ export default function SettingsForm({ initialSettings }: SettingsFormProps) {
     const [dataSource, setDataSource] = useState(initialSettings.dataSource);
     const [igdbClientId, setIgdbClientId] = useState(initialSettings.igdbClientId);
     const [igdbClientSecret, setIgdbClientSecret] = useState(initialSettings.igdbClientSecret);
+    const [geminiApiKey, setGeminiApiKey] = useState(initialSettings.geminiApiKey);
     const [isSaving, setIsSaving] = useState(false);
 
     const handleSave = async () => {
@@ -30,7 +32,8 @@ export default function SettingsForm({ initialSettings }: SettingsFormProps) {
         await saveSettings({
             dataSource,
             igdbClientId,
-            igdbClientSecret
+            igdbClientSecret,
+            geminiApiKey
         });
         setIsSaving(false);
         alert('Settings saved!');
@@ -71,6 +74,24 @@ export default function SettingsForm({ initialSettings }: SettingsFormProps) {
                             />
                         </Box>
                     )}
+                </CardContent>
+            </Card>
+
+            <Card sx={{ mb: 3 }}>
+                <CardContent>
+                    <Typography variant="h6" gutterBottom>AI Configuration</Typography>
+                    <Typography variant="body2" color="text.secondary" gutterBottom>
+                        Required for "The Historian's Manual" dynamic content generation.
+                    </Typography>
+                    <TextField
+                        label="Google Gemini API Key"
+                        fullWidth
+                        margin="normal"
+                        type="password"
+                        value={geminiApiKey}
+                        onChange={(e) => setGeminiApiKey(e.target.value)}
+                        placeholder="AIza..."
+                    />
                 </CardContent>
             </Card>
 
