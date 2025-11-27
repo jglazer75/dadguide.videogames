@@ -58,11 +58,8 @@ export default async function Home() {
         <Box sx={{ p: 2 }}>
             {/* Header */}
             <Box sx={{ mb: 4, textAlign: 'center' }}>
-                <Typography variant="h4" component="h1" gutterBottom sx={{ fontFamily: '"Press Start 2P", cursive', color: 'secondary.main', fontSize: '1.5rem' }}>
-                    PLAYER 1 & PLAYER 2
-                </Typography>
-                <Typography variant="subtitle1" color="text.secondary">
-                    CHRONICLES
+                <Typography variant="h4" component="h1" gutterBottom sx={{ fontFamily: '"Press Start 2P", cursive', color: 'secondary.main', fontSize: '1.5rem', lineHeight: 1.4 }}>
+                    The Continuing Chronicles of<br />Player 1 & Player 2
                 </Typography>
             </Box>
 

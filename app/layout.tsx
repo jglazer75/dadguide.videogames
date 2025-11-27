@@ -4,8 +4,8 @@ import SimpleBottomNavigation from "@/components/BottomNav";
 import Box from "@mui/material/Box";
 
 export const metadata: Metadata = {
-    title: "Learn.Play",
-    description: "Player 1 & Player 2 Chronicles",
+    title: 'The Continuing Chronicles of Player 1 & Player 2',
+    description: 'A father-son gaming curriculum',
 };
 
 export default function RootLayout({

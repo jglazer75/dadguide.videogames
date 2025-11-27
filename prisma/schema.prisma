@@ -37,6 +37,8 @@ model Week {
   objective       String
   historianLesson String
   isCompleted     Boolean  @default(false)
+  highScore       String?  // e.g. "100,000 pts" or "Level 5"
+  notes           String?  // Shared notes for the week
   reviews         Review[]
 }
 

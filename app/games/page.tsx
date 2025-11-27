@@ -8,17 +8,33 @@ import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
 import { prisma } from '@/lib/db';
+import { redirect } from 'next/navigation';
 
 export const dynamic = 'force-dynamic';
 
-async function getGames() {
+async function getGames(query?: string) {
     return await prisma.game.findMany({
-        orderBy: { title: 'asc' }
+        where: query ? {
+            title: { contains: query, mode: 'insensitive' }
+        } : {},
+        orderBy: { title: 'asc' },
+        include: {
+            weeks: {
+                select: { weekNumber: true, title: true }
+            }
+        }
     });
 }
 
-export default async function GamesPage() {
-    const games = await getGames();
+export default async function GamesPage({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
+    const { q } = await searchParams;
+    const games = await getGames(q);
+
+    async function searchGames(formData: FormData) {
+        'use server';
+        const query = formData.get('q');
+        redirect(`/games?q=${query}`);
+    }
 
     return (
         <Box sx={{ p: 2 }}>
@@ -26,19 +42,22 @@ export default async function GamesPage() {
                 Game Library
             </Typography>
 
-            <TextField
-                fullWidth
-                placeholder="Search games..."
-                variant="outlined"
-                sx={{ mb: 3 }}
-                InputProps={{
-                    startAdornment: (
-                        <InputAdornment position="start">
-                            <SearchIcon />
-                        </InputAdornment>
-                    ),
-                }}
-            />
+            <Box component="form" action={searchGames} sx={{ mb: 3 }}>
+                <TextField
+                    name="q"
+                    fullWidth
+                    placeholder="Search games..."
+                    defaultValue={q}
+                    variant="outlined"
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <SearchIcon />
+                            </InputAdornment>
+                        ),
+                    }}
+                />
+            </Box>
 
             <Grid container spacing={2}>
                 {games.map((game: any) => (
@@ -55,9 +74,14 @@ export default async function GamesPage() {
                                 <Typography variant="subtitle1" component="div" sx={{ lineHeight: 1.2, mb: 1, fontWeight: 'bold' }}>
                                     {game.title}
                                 </Typography>
-                                <Typography variant="caption" color="text.secondary">
+                                <Typography variant="caption" color="text.secondary" display="block">
                                     {game.platform || 'Unknown Platform'} • {game.releaseDate ? new Date(game.releaseDate).getFullYear() : 'N/A'}
                                 </Typography>
+                                {game.weeks.length > 0 && (
+                                    <Typography variant="caption" color="primary" sx={{ mt: 1, display: 'block', fontWeight: 'bold' }}>
+                                        Week {game.weeks[0].weekNumber}: {game.weeks[0].title}
+                                    </Typography>
+                                )}
                             </CardContent>
                         </Card>
                     </Grid>

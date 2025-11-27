@@ -14,6 +14,7 @@ import Link from 'next/link';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import { prisma } from '@/lib/db';
+import WeekTracker from '@/components/WeekTracker';
 
 export const dynamic = 'force-dynamic';
 
@@ -65,8 +66,15 @@ export default async function CurriculumPage({ searchParams }: { searchParams: P
                                         <Link href={`/curriculum?week=${week.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                                             <ListItemButton selected={week.id === targetWeekId}>
                                                 <ListItemAvatar>
-                                                    <Avatar sx={{ bgcolor: week.isCompleted ? 'secondary.main' : 'grey.700' }}>
-                                                        {week.isCompleted ? <CheckCircleIcon /> : <RadioButtonUncheckedIcon />}
+                                                    <Avatar
+                                                        src={week.game?.coverUrl}
+                                                        alt={week.game?.title || "Game"}
+                                                        sx={{
+                                                            bgcolor: week.isCompleted ? 'secondary.main' : 'grey.700',
+                                                            border: week.isCompleted ? '2px solid #00e676' : 'none'
+                                                        }}
+                                                    >
+                                                        {!week.game?.coverUrl && (week.isCompleted ? <CheckCircleIcon /> : <RadioButtonUncheckedIcon />)}
                                                     </Avatar>
                                                 </ListItemAvatar>
                                                 <ListItemText
@@ -76,10 +84,17 @@ export default async function CurriculumPage({ searchParams }: { searchParams: P
                                             </ListItemButton>
                                         </Link>
                                         {week.id === targetWeekId && (
-                                            <Box sx={{ p: 2, bgcolor: 'action.hover', pl: 9 }}>
+                                            <Box sx={{ p: 2, bgcolor: 'action.hover', pl: { xs: 2, sm: 9 } }}>
                                                 <Typography variant="body2" gutterBottom><strong>Activity:</strong> {week.activity}</Typography>
                                                 <Typography variant="body2" gutterBottom><strong>Objective:</strong> {week.objective}</Typography>
-                                                <Typography variant="body2"><strong>Historian Lesson:</strong> {week.historianLesson}</Typography>
+                                                <Typography variant="body2" gutterBottom><strong>Historian Lesson:</strong> {week.historianLesson}</Typography>
+
+                                                <WeekTracker
+                                                    weekId={week.id}
+                                                    isCompleted={week.isCompleted}
+                                                    highScore={week.highScore}
+                                                    notes={week.notes}
+                                                />
                                             </Box>
                                         )}
                                     </ListItem>
