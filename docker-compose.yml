@@ -11,9 +11,8 @@ services:
       - DATABASE_URL=${DATABASE_URL}
       - REDIS_URL=${REDIS_URL}
     networks:
-      - app_network
+      - ogdenor
 
 networks:
-  app_network:
+  ogdenor:
     external: true
-    name: ${NETWORK_NAME}
